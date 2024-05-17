@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <input type="file" id="fileInput">
+    <button onclick="uploadImage()">Upload</button>
+    <div id="uploadStatus"></div>
+    <script>
+        function uploadImage() {
+            var fileInput = document.getElementById("fileInput");
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append("drive_file", file);
+
+            fetch("/upload/uploadToDrive", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("uploadStatus").textContent = data.message;
+                if (data.status === 1) {
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("uploadStatus").textContent = "An error occurred during upload.";
+            });
+        }
+    </script>
+</body>
+</html>
+
